@@ -61,8 +61,9 @@
 				container.appendChild( info );
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
-				camera.position.y = 150;
-				camera.position.z = 500;
+				camera.position.y = 320;
+				camera.position.z = 400;
+                camera.rotation.x = 0;
 
 				scene = new THREE.Scene();
 // !--------- LOCAL CHANGES WORKING WITH FACE VERTEX UVS --------------- ! //
@@ -88,7 +89,6 @@
                 shmube = new THREE.Mesh(working, material);
                 shmube.position.set(250, 150, 0);
                 scene.add(shmube);
-                geometry.faceUvs = [[]];
                 geometry.vertices.push( new THREE.Vector3( 50, -50, -50 ) );
                 geometry.vertices.push( new THREE.Vector3(  50, -50, 50 ) );
                 geometry.vertices.push( new THREE.Vector3(  -50,  -50, 50 ) );
@@ -112,11 +112,52 @@
 //                    [0.086556,0.314496]
 //                ];
                 
-                var vertexUVS =
+                var yellow1 =
                 [
-                    [0,0],
-                    [0,1],
-                    [1,0]
+                    [0.491259,0.982841],
+                    [0.507120,0.638653],
+                    [0.042908,0.834260],
+                ];
+                
+                 var yellow2 =
+                [
+                    [0.507120,0.638653],
+                    [0.491259,0.982841],
+                    [0.042908,0.834260],
+                  
+
+                ];
+                
+                var red1 =
+                [ 
+                    [0.897624,0.308543],
+                    [0.952325,0.834875],                  
+                    [0.507120,0.638653],
+                ];
+                
+                var red2 =
+                [
+                    [0.897624,0.308543],
+                    [0.952325,0.834875],                  
+                    [0.507120,0.638653],
+                ];
+                
+              
+                
+                var blue1 =
+                [
+                    [0.499073,0.039900],
+                    [0.042908,0.834260],                    
+                    [0.086556,0.314496]
+                                 
+                ];
+                
+                 var blue2 =
+                [
+                    [0.507120,0.638653],                                    
+                    [0.042908,0.834260],
+                    [0.499073,0.039900],
+
 
                 ];
                 
@@ -135,38 +176,41 @@
                 faceInfo.forEach(function(val, index, array ){
                  geometry.faces.push( new THREE.Face3( val[0],val[1] , val[2], color, materialIndex ))
                 });
-                
-//                var face =   new THREE.Face3( 4, 3, 0, color, materialIndex );
-//                var face1 =  new THREE.Face3( 4, 1, 0, color, materialIndex );
-//                var face2 =  new THREE.Face3( 1, 5, 4, color, materialIndex );
-//                var face3 =  new THREE.Face3( 2, 5, 1, color, materialIndex );
-//
-//                var face4 =  new THREE.Face3( 5, 3, 6, color, materialIndex );
-//                var face5 =  new THREE.Face3( 3, 5, 4, color, materialIndex );
-//                
-//                
-//                //add the face to the geometry's faces array
-//                geometry.faces.push( face );
-//                geometry.faces.push( face1 );
-//                geometry.faces.push( face2 );
-//                geometry.faces.push( face3 );
-//                geometry.faces.push( face4 );
-//                geometry.faces.push( face5 );
+
                 
                 //Our uvHolder mapping code
-                var uvHolder=[];
-                vertexUVS.forEach(function(val, index, array ){
-                       uvHolder.push(new THREE.Vector2(val[0], val[1]));
-                    
-                    
+                var yellowUV1 = [], yellowUV2 = [];
+                yellow1.forEach(function(val, index, array ){
+                       yellowUV1.push(new THREE.Vector2(val[0], val[1]));
                 })
+                yellow2.forEach(function(val, index, array ){
+                       yellowUV2.push(new THREE.Vector2(val[0], val[1]));
+                })
+                
+                var redUV1 = [], redUV2 = [];
+                red1.forEach(function(val, index, array ){
+                       redUV1.push(new THREE.Vector2(val[0], val[1]));
+                })
+                red2.forEach(function(val, index, array ){
+                       redUV2.push(new THREE.Vector2(val[0], val[1]));
+                })
+                
+                var blueUV1 = [], blueUV2 = [];
+                blue1.forEach(function(val, index, array ){
+                       blueUV1.push(new THREE.Vector2(val[0], val[1]));
+                })
+                blue2.forEach(function(val, index, array ){
+                       blueUV2.push(new THREE.Vector2(val[0], val[1]));
+                })
+                
                
-                geometry.faceVertexUvs[0].push(uvHolder);
-                geometry.faceVertexUvs[0].push(uvHolder);
-                geometry.faceVertexUvs[0].push(uvHolder);
-                geometry.faceVertexUvs[0].push(uvHolder);
-                geometry.faceVertexUvs[0].push(uvHolder);
-                geometry.faceVertexUvs[0].push(uvHolder);
+
+                geometry.faceVertexUvs[0].push(redUV1);
+                geometry.faceVertexUvs[0].push(redUV2);
+                geometry.faceVertexUvs[0].push(blueUV1);
+                geometry.faceVertexUvs[0].push(blueUV2);
+                geometry.faceVertexUvs[0].push(yellowUV1);
+                geometry.faceVertexUvs[0].push(yellowUV2);
                 
                 
                 
