@@ -20,6 +20,7 @@
 		<script src="js/renderers/Projector.js"></script>
 		<script src="js/renderers/CanvasRenderer.js"></script>
 		<script src="js/loaders/OBJLoader.js"></script>
+		<script src="js/THREEx.KeyboardState.js"></script>
 
         
 		
@@ -37,9 +38,11 @@
 
 			var targetRotation = 0;
 			var targetRotationOnMouseDown = 0;
-
+            
+            var uvValue = 0, uvValue1 = 0, uvValue2 = 0, uvValue3 = 0, uvValue4 = 0, uvValue5 = 0;
 			var mouseX = 0;
 			var mouseXOnMouseDown = 0;
+            var keyboard;
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
@@ -55,10 +58,29 @@
 				var info = document.createElement( 'div' );
 				info.style.position = 'absolute';
 				info.style.top = '10px';
+                
 				info.style.width = '100%';
-				info.style.textAlign = 'center';
-				info.innerHTML = 'Drag to spin the cube';
+				info.style.textAlign = 'right';
+                info.setAttribute("id", "info");
 				container.appendChild( info );
+                
+                var info1 = document.createElement( 'div' );
+				info1.style.position = 'absolute';
+				info1.style.top = '20px';
+                
+				info1.style.width = '100%';
+				info1.style.textAlign = 'right';
+                info1.setAttribute("id", "info1");
+				container.appendChild( info1 );
+                
+                var info2 = document.createElement( 'div' );
+				info2.style.position = 'absolute';
+				info2.style.top = '30px';
+                
+				info2.style.width = '100%';
+				info2.style.textAlign = 'right';
+                info2.setAttribute("id", "info2");
+				container.appendChild( info2 );
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
 				camera.position.y = 320;
@@ -66,6 +88,8 @@
 				camera.position.x = 100;
                 
                 camera.rotation.x = 0;
+                
+                keyboard = new THREEx.KeyboardState();
 
 				scene = new THREE.Scene();
 // !--------- LOCAL CHANGES WORKING WITH FACE VERTEX UVS --------------- ! //
@@ -383,15 +407,71 @@
 
 			//
 
+            //Translation of UV functions
+            
+            function translateUV(geo, transVec)
+            {
+                fuvs = geo.faceVertexUvs;
+                fuvs.forEach(function(val, index, array )
+                {
+                    val.forEach(function(vec, index, array )
+                    {
+                        for(var j = 0; j < 3; j++)
+                        {
+                            
+                            vec[j].x += transVec.x;
+                            vec[j].y += transVec.y;
+                            
+                            geo.uvsNeedUpdate = true;
+                        } 
+                        uvValue =  val[0][0].x 
+                        uvValue1 = val[0][1].y 
+                        
+                        uvValue2 = val[1][0].x 
+                        uvValue3 = val[1][1].y 
+                        
+                        uvValue4 = val[2][0].x 
+                        uvValue5 = val[2][1].y 
+                        
+                    });
+                });
+                
+            }
 			function animate() {
 
 				requestAnimationFrame( animate );
 
 				stats.begin();
-			render();
+			     render();
 				stats.end();
+                
+                if(keyboard.pressed("up"))
+                {
+                    translateUV(cube.geometry, new THREE.Vector2(0, -0.001));    
+                }
+                
+                if(keyboard.pressed("down"))
+                {
+                    translateUV(cube.geometry, new THREE.Vector2(0, 0.001));    
+                }
+                
+                 if(keyboard.pressed("left"))
+                {
+                    translateUV(cube.geometry, new THREE.Vector2(-0.001, 0));    
+                }
+                
+                 if(keyboard.pressed("right"))
+                {
+                    translateUV(cube.geometry, new THREE.Vector2(0.001, 0));    
+                }
+				document.getElementById("info").innerHTML = "Red uv_x:" + uvValue + " | " + "Red uv_y: " + uvValue1;
+                
+                document.getElementById("info1").innerHTML = "Blue uv_x:" + uvValue2 + " | " + "Blue uv_y: " + uvValue3;
+                
+                document.getElementById("info2").innerHTML = "Yellow uv_x:" + uvValue4 + " | " + "Yellow uv_y: " + uvValue5;
 
 			}
+            
 
 			function render() {
 
